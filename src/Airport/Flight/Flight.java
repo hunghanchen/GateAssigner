@@ -1,6 +1,6 @@
 
 
-package Airport;
+package Airport.Flight;
 
 /**
  *
@@ -11,13 +11,17 @@ public class Flight {
     protected String FlightNo;
     protected String ARR;
     protected String DEP;
+    protected DateOfFlight date;
 
-    public Flight(String Airline,String FlightNo, String ARR, String DEP) {
+    public Flight(String Airline, String FlightNo, String ARR, String DEP, DateOfFlight date) {
         this.Airline = Airline;
-        this.FlightNo=FlightNo;
+        this.FlightNo = FlightNo;
         this.ARR = ARR;
         this.DEP = DEP;
+        this.date = date;
     }
+
+    
 
     public String getAirline() {
         return Airline;

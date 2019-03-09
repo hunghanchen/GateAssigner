@@ -1,4 +1,6 @@
-package Airport;
+package Airport.Gate;
+
+import Airport.Gate.Gate;
 
 /**
  *

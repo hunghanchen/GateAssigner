@@ -1,6 +1,6 @@
 
 
-package Airport;
+package Airport.Flight;
 
 /**
  *
@@ -8,11 +8,12 @@ package Airport;
  */
 public class International extends Flight {
     protected String Custom;
-    public International(String Airline,String FlightNo, String ARR, String DEP,String Custom) {
-        super(Airline,FlightNo,ARR,DEP);
-        this.Custom=Custom;
-        
+
+    public International(String Custom, String Airline, String FlightNo, String ARR, String DEP, DateOfFlight date) {
+        super(Airline, FlightNo, ARR, DEP, date);
+        this.Custom = Custom;
     }
+    
      @Override
     public String toString() {
 

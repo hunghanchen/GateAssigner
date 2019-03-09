@@ -1,15 +1,19 @@
 
 
-package Airport;
+package Airport.Flight;
+
+import Airport.Flight.Flight;
 
 /**
  *
  * @author ayfer
  */
 public class Others extends Flight{
-    public Others (String Airline, String FlightNo,String ARR, String DEP) {
-        super(Airline,FlightNo,ARR,DEP);
+
+    public Others(String Airline, String FlightNo, String ARR, String DEP, DateOfFlight date) {
+        super(Airline, FlightNo, ARR, DEP, date);
     }
+    
     
      @Override
      public String toString() {
