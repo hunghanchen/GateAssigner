@@ -21,6 +21,6 @@ public class DateOfFlight {
     public void setFlightDate(Date FlightDate) {
         this.FlightDate = FlightDate;
     }
-    
+    //3/9/2018
 
 }
