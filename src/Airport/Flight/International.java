@@ -17,13 +17,15 @@ public class International extends Flight {
     }
 
     
-//     @Override
-//    public String toString() {
-//
-//        String format = "This International Flight is %s`s Flight and Flight no is %s Arrival time is %s and departure time is %s";
-//        return String.format(format, Airline,FlightNo, ARR,DEP);
-//
-//    }
+@Override
+    public String toString() {
+
+        String format = "This Flight is International %s Flight and Flight no is %s Arrival"
+                + " arrival time is %tF and departure time is %tF"
+                + "comes from %s and goes to %s";
+        return String.format(format, Airline, FlightNo, dateOfArrival, dateOfDeparture, ARR, DEP);
+
+    }
     public void CustomProcess(String Custom){
         System.out.println("This international Flight needs "+Custom + "Custom Process");
     }

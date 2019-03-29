@@ -62,10 +62,7 @@ public class Domestic extends Flight {
         this.dateOfDeparture = dateOfDeparture;
     }
     
-    
 
-    
-    
      @Override
     public String toString() {
 

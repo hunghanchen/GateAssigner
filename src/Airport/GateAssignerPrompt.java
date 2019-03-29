@@ -1,8 +1,10 @@
 package Airport;
 
 import Airport.Flight.DateOfFlight;
+import Airport.Flight.Domestic;
 import Airport.Flight.Flight;
 import Airport.Flight.International;
+import Airport.Flight.Others;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.Event;
@@ -123,6 +125,13 @@ public class GateAssignerPrompt extends Application {
         primaryStage.show();
 
     }
+//    public void createFlight(){
+//        
+//        while(true){
+//            promptFlightInfo();
+//        }
+//    
+//    }
 
     public void createFlight() {
 
@@ -131,8 +140,27 @@ public class GateAssignerPrompt extends Application {
                     txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
                     dateOfArrival.getValue(), dateOfDeparture.getValue()));
             System.out.println(infoOfFlight.get(0).toString());
-
+        } else if (radDomestic.isSelected()) {
+            infoOfFlight.add(new Domestic(txtAirline.getText(),
+                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
+                    dateOfArrival.getValue(), dateOfDeparture.getValue()));
+            System.out.println(infoOfFlight.get(1).toString());
+        } else if (radOthers.isSelected()) {
+            infoOfFlight.add(new Others(txtAirline.getText(),
+                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
+                    dateOfArrival.getValue(), dateOfDeparture.getValue()));
+            System.out.println(infoOfFlight.get(2).toString());
         }
-    }
 
+        radInternational.setSelected(false);
+        radDomestic.setSelected(false);
+        radOthers.setSelected(false);
+        txtAirline.clear();
+        txtFlightNo.clear();
+        txtComesFrom.clear();
+        txtGoesTo.clear();
+        dateOfArrival.getEditor().clear();
+        dateOfDeparture.getEditor().clear();
+
+    }
 }
