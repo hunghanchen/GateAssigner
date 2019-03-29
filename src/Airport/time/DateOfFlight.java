@@ -1,6 +1,6 @@
 
 
-package Airport.Flight;
+package Airport.time;
 import java.time.LocalDate;
 import java.util.Date;
 

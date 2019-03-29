@@ -1,6 +1,6 @@
 package Airport;
 
-import Airport.Flight.DateOfFlight;
+import Airport.time.DateOfFlight;
 import Airport.Flight.Domestic;
 import Airport.Flight.Flight;
 import Airport.Flight.International;
@@ -72,7 +72,7 @@ public class CreateFlight extends Application {
 
         txtAirline = new TextField();
 
-        gridInfoPrompt.add(txtAirline, 1, 0, 3, 1);
+        gridInfoPrompt.add(txtAirline, 1, 0, 2, 1);
 
         Label lblFlightNo = new Label("Flight Number");
         gridInfoPrompt.add(lblFlightNo, 0, 1);
@@ -93,7 +93,6 @@ public class CreateFlight extends Application {
         ObservableList clockList = FXCollections.observableArrayList(clock);
         cmbClockOfArrival.setItems(clockList);
         cmbClockOfArrival.getSelectionModel().select("");
-//        gridInfoPrompt.add(cmbClockOfArrival, 2, 2, 1, 1);
 
         // This two array is use for loop to create 0~59 minutes
         //because integer cant not show 00 01 02 03 04
@@ -115,17 +114,45 @@ public class CreateFlight extends Application {
         ObservableList minutesList = FXCollections.observableArrayList(strArrayMinutes);
         cmbMinutesOfArrival.setItems(minutesList);
         cmbMinutesOfArrival.getSelectionModel().select("");
-//        gridInfoPrompt.add(cmbMinutesOfArrival, 3, 2, 1, 1);
 
-        HBox hBoxTime = new HBox(2);
-        hBoxTime.getChildren().addAll(cmbClockOfArrival, cmbMinutesOfArrival);
-        gridInfoPrompt.add(hBoxTime, 2, 2, 3, 1);
+        HBox hBoxTimeOfArrival = new HBox(2);
+        hBoxTimeOfArrival.getChildren().addAll(cmbClockOfArrival, cmbMinutesOfArrival);
+        gridInfoPrompt.add(hBoxTimeOfArrival, 2, 2, 3, 1);
 
         Label lblTimeOfDeparture = new Label("Scheduled Time of Departure");
         gridInfoPrompt.add(lblTimeOfDeparture, 0, 3);
 
         dateOfDeparture = new DatePicker();
         gridInfoPrompt.add(dateOfDeparture, 1, 3, 2, 1);
+
+        ComboBox<String> cmbClockOfDeparture = new ComboBox<>();
+//        String[] clock = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
+//            "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21",
+//            "22", "23"};
+        clockList = FXCollections.observableArrayList(clock);
+        cmbClockOfDeparture.setItems(clockList);
+        cmbClockOfDeparture.getSelectionModel().select("");
+
+        // This two array is use for loop to create 0~59 minutes
+        //because integer cant not show 00 01 02 03 04
+        //so I need to change to Sting to show these numbers
+        ComboBox<String> cmbMinutesOfDeparture = new ComboBox<>();
+//        String[] strArrayMinutes = new String[60];
+//        for (int i = 0; i < strArrayMinutes.length; i++) {
+//            if (intArrayMinutes[i] < 10) {
+//                strArrayMinutes[i] = "0" + String.valueOf(intArrayMinutes[i]);
+//            } else {
+//                strArrayMinutes[i] = String.valueOf(intArrayMinutes[i]);
+//            }
+//        }
+
+        minutesList = FXCollections.observableArrayList(strArrayMinutes);
+        cmbMinutesOfDeparture.setItems(minutesList);
+        cmbMinutesOfDeparture.getSelectionModel().select("");
+
+        HBox hBoxTimeOfDeparture = new HBox(2);
+        hBoxTimeOfDeparture.getChildren().addAll(cmbClockOfDeparture, cmbMinutesOfDeparture);
+        gridInfoPrompt.add(hBoxTimeOfDeparture, 2, 3, 3, 1);
 
         // can't not show in javafx timepicker
         Label lblComesFrom = new Label("Comes From");
@@ -151,7 +178,7 @@ public class CreateFlight extends Application {
         layOut.getChildren().addAll(lblGateAssigner, flightStyle, gridInfoPrompt);
         layOut.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(layOut, 400, 400);
+        Scene scene = new Scene(layOut, 550, 400);
 
         primaryStage.setTitle("Create Flight");
         primaryStage.setScene(scene);
