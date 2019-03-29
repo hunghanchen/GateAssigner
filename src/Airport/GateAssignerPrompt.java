@@ -7,18 +7,18 @@ import Airport.Flight.International;
 import Airport.Flight.Others;
 import java.util.ArrayList;
 import javafx.application.Application;
-import javafx.event.Event;
-import javafx.event.EventHandler;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventTarget.*;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
@@ -84,7 +84,16 @@ public class GateAssignerPrompt extends Application {
         gridInfoPrompt.add(lblTimeOfArrival, 0, 2);
 
         dateOfArrival = new DatePicker();
-        gridInfoPrompt.add(dateOfArrival, 1, 2, 2, 1);
+        gridInfoPrompt.add(dateOfArrival, 1, 2, 1, 1);
+
+        ComboBox<String> cmbClockOfArrival = new ComboBox<>();
+        String[] clock = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
+            "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21",
+            "22", "23"};
+        ObservableList clockList = FXCollections.observableArrayList(clock);
+        cmbClockOfArrival.setItems(clockList);
+        cmbClockOfArrival.getSelectionModel().select("");
+        gridInfoPrompt.add(cmbClockOfArrival, 2, 2, 1, 1);
 
         Label lblTimeOfDeparture = new Label("Scheduled Time of Departure");
         gridInfoPrompt.add(lblTimeOfDeparture, 0, 3);
@@ -93,7 +102,6 @@ public class GateAssignerPrompt extends Application {
         gridInfoPrompt.add(dateOfDeparture, 1, 3, 2, 1);
 
         // can't not show in javafx timepicker
-//        TimePicker time = new TimePicker();
         Label lblComesFrom = new Label("Comes From");
         gridInfoPrompt.add(lblComesFrom, 0, 4);
 
