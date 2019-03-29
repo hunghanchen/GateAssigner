@@ -1,6 +1,7 @@
 
 
 package Airport.Flight;
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -8,17 +9,17 @@ import java.util.Date;
  * @author ayfer
  */
 public class DateOfFlight {
-   protected Date FlightDate;
+   protected LocalDate FlightDate;
 
-    public DateOfFlight(Date FlightDate) {
+    public DateOfFlight(LocalDate FlightDate) {
         this.FlightDate=FlightDate;
     }
 
-    public Date getFlightDate() {
+    public LocalDate getFlightDate() {
         return FlightDate;
     }
 
-    public void setFlightDate(Date FlightDate) {
+    public void setFlightDate(LocalDate FlightDate) {
         this.FlightDate = FlightDate;
     }
     
