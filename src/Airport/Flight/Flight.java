@@ -1,5 +1,6 @@
 package Airport.Flight;
 
+import Airport.time.TimeOfFlight;
 import java.time.LocalDate;
 
 /**
@@ -14,15 +15,39 @@ public class Flight {
     protected String DEP;
     protected LocalDate dateOfArrival;
     protected LocalDate dateOfDeparture;
+    protected TimeOfFlight timeOfArrival;
+    protected TimeOfFlight timeOfDepature;
 
-    public Flight(String Airline, String FlightNo, String ARR, String DEP, LocalDate dateOfArrival, LocalDate dateOfDeparture) {
+    public Flight(String Airline, String FlightNo, String ARR, String DEP, 
+            LocalDate dateOfArrival, LocalDate dateOfDeparture, 
+            TimeOfFlight timeOfArrival, TimeOfFlight timeOfDepature) {
         this.Airline = Airline;
         this.FlightNo = FlightNo;
         this.ARR = ARR;
         this.DEP = DEP;
         this.dateOfArrival = dateOfArrival;
         this.dateOfDeparture = dateOfDeparture;
+        this.timeOfArrival = timeOfArrival;
+        this.timeOfDepature = timeOfDepature;
     }
+
+    public TimeOfFlight getTimeOfArrival() {
+        return timeOfArrival;
+    }
+
+    public void setTimeOfArrival(TimeOfFlight timeOfArrival) {
+        this.timeOfArrival = timeOfArrival;
+    }
+
+    public TimeOfFlight getTimeOfDepature() {
+        return timeOfDepature;
+    }
+
+    public void setTimeOfDepature(TimeOfFlight timeOfDepature) {
+        this.timeOfDepature = timeOfDepature;
+    }
+
+    
 
     public LocalDate getDateOfArrival() {
         return dateOfArrival;

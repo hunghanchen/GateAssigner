@@ -2,6 +2,7 @@
 
 package Airport.Flight;
 
+import Airport.time.TimeOfFlight;
 import java.time.LocalDate;
 
 /**
@@ -10,9 +11,27 @@ import java.time.LocalDate;
  */
 public class Domestic extends Flight {
 
-    public Domestic(String Airline, String FlightNo, String ARR, String DEP, LocalDate dateOfArrival, LocalDate dateOfDeparture) {
-        super(Airline, FlightNo, ARR, DEP, dateOfArrival, dateOfDeparture);
+    public Domestic(String Airline, String FlightNo, String ARR, String DEP, LocalDate dateOfArrival, LocalDate dateOfDeparture, TimeOfFlight timeOfArrival, TimeOfFlight timeOfDepature) {
+        super(Airline, FlightNo, ARR, DEP, dateOfArrival, dateOfDeparture, timeOfArrival, timeOfDepature);
     }
+
+    public TimeOfFlight getTimeOfArrival() {
+        return timeOfArrival;
+    }
+
+    public void setTimeOfArrival(TimeOfFlight timeOfArrival) {
+        this.timeOfArrival = timeOfArrival;
+    }
+
+    public TimeOfFlight getTimeOfDepature() {
+        return timeOfDepature;
+    }
+
+    public void setTimeOfDepature(TimeOfFlight timeOfDepature) {
+        this.timeOfDepature = timeOfDepature;
+    }
+
+    
 
     public String getAirline() {
         return Airline;

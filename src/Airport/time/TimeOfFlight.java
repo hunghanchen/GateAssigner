@@ -11,6 +11,9 @@ public class TimeOfFlight {
     protected String clock;
     protected String minute;
 
+    public TimeOfFlight() {
+        
+    }
     public TimeOfFlight(String clock, String minute) {
         this.clock = clock;
         this.minute = minute;
@@ -30,6 +33,12 @@ public class TimeOfFlight {
 
     public void setMinute(String minute) {
         this.minute = minute;
+    }
+    
+    @Override
+    public String toString(){
+        String format = "test %s clock %s minutes";
+        return String.format(format, getClock(),getMinute());
     }
     
     

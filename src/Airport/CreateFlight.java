@@ -1,10 +1,11 @@
 package Airport;
 
-import Airport.time.DateOfFlight;
 import Airport.Flight.Domestic;
 import Airport.Flight.Flight;
 import Airport.Flight.International;
 import Airport.Flight.Others;
+import Airport.time.TimeOfFlight;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -47,6 +48,12 @@ public class CreateFlight extends Application {
     private DatePicker dateOfDeparture;
     private TextField txtComesFrom;
     private TextField txtGoesTo;
+    private ComboBox<String> cmbClockOfArrival;
+    private ComboBox<String> cmbMinutesOfArrival;
+    private ComboBox<String> cmbClockOfDeparture;
+    private ComboBox<String> cmbMinutesOfDeparture;
+    private TimeOfFlight timeOfArrival;
+    private TimeOfFlight timeOfDepature;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -86,7 +93,7 @@ public class CreateFlight extends Application {
         dateOfArrival = new DatePicker();
         gridInfoPrompt.add(dateOfArrival, 1, 2, 1, 1);
 
-        ComboBox<String> cmbClockOfArrival = new ComboBox<>();
+        cmbClockOfArrival = new ComboBox<>();
         String[] clock = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
             "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21",
             "22", "23"};
@@ -101,7 +108,7 @@ public class CreateFlight extends Application {
         for (int i = 0; i < intArrayMinutes.length; i++) {
             intArrayMinutes[i] = i;
         }
-        ComboBox<String> cmbMinutesOfArrival = new ComboBox<>();
+        cmbMinutesOfArrival = new ComboBox<>();
         String[] strArrayMinutes = new String[60];
         for (int i = 0; i < strArrayMinutes.length; i++) {
             if (intArrayMinutes[i] < 10) {
@@ -125,10 +132,8 @@ public class CreateFlight extends Application {
         dateOfDeparture = new DatePicker();
         gridInfoPrompt.add(dateOfDeparture, 1, 3, 2, 1);
 
-        ComboBox<String> cmbClockOfDeparture = new ComboBox<>();
-//        String[] clock = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
-//            "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21",
-//            "22", "23"};
+        cmbClockOfDeparture = new ComboBox<>();
+
         clockList = FXCollections.observableArrayList(clock);
         cmbClockOfDeparture.setItems(clockList);
         cmbClockOfDeparture.getSelectionModel().select("");
@@ -136,15 +141,7 @@ public class CreateFlight extends Application {
         // This two array is use for loop to create 0~59 minutes
         //because integer cant not show 00 01 02 03 04
         //so I need to change to Sting to show these numbers
-        ComboBox<String> cmbMinutesOfDeparture = new ComboBox<>();
-//        String[] strArrayMinutes = new String[60];
-//        for (int i = 0; i < strArrayMinutes.length; i++) {
-//            if (intArrayMinutes[i] < 10) {
-//                strArrayMinutes[i] = "0" + String.valueOf(intArrayMinutes[i]);
-//            } else {
-//                strArrayMinutes[i] = String.valueOf(intArrayMinutes[i]);
-//            }
-//        }
+        cmbMinutesOfDeparture = new ComboBox<>();
 
         minutesList = FXCollections.observableArrayList(strArrayMinutes);
         cmbMinutesOfDeparture.setItems(minutesList);
@@ -168,7 +165,7 @@ public class CreateFlight extends Application {
         gridInfoPrompt.add(txtGoesTo, 1, 5, 2, 1);
 
         Button btnTestDate = new Button("Create Flight");
-        btnTestDate.setOnAction(event -> createFlight());
+//        btnTestDate.setOnAction(event -> createFlight());
         gridInfoPrompt.add(btnTestDate, 2, 6);
         GridPane.setHalignment(btnTestDate, HPos.RIGHT);
 
@@ -185,43 +182,60 @@ public class CreateFlight extends Application {
 
         primaryStage.show();
 
+        
+
     }
-//    public void createFlight(){
-//        
-//        while(true){
-//            promptFlightInfo();
-//        }
-//    
-//    }
 
     public void createFlight() {
+
+        timeOfArrival = new TimeOfFlight(cmbClockOfArrival.getValue(),
+                cmbMinutesOfArrival.getValue());
+
+        timeOfDepature = new TimeOfFlight(
+                cmbClockOfDeparture.getValue(), cmbMinutesOfDeparture.getValue());
+
+        System.out.println("arrival" + timeOfArrival);
+        System.out.println("departure" + timeOfDepature);
 
         if (radInternational.isSelected()) {
             infoOfFlight.add(new International("ProceedeXXX", txtAirline.getText(),
                     txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                    dateOfArrival.getValue(), dateOfDeparture.getValue()));
+                    dateOfArrival.getValue(), dateOfDeparture.getValue()),
+                    timeOfArrival, timeOfDepature);
+            System.out.println("arrival" + timeOfArrival);
+            System.out.println("departure" + timeOfDepature);
+
+//            new TimeOfFlight(cmbClockOfArrival.getValue(),cmbMinutesOfArrival.getValue()),
+//                    new TimeOfFlight(cmbClockOfDeparture.getValue(),cmbMinutesOfDeparture.getValue())
+//            International(String Custom, String Airline, String FlightNo, 
+//            String ARR, String DEP, LocalDate dateOfArrival, 
+//            LocalDate dateOfDeparture, TimeOfFlight timeOfArrival, 
+//            TimeOfFlight timeOfDepature) {
+
             System.out.println(infoOfFlight.get(0).toString());
         } else if (radDomestic.isSelected()) {
             infoOfFlight.add(new Domestic(txtAirline.getText(),
                     txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                    dateOfArrival.getValue(), dateOfDeparture.getValue()));
+                    dateOfArrival.getValue(), dateOfDeparture.getValue()),
+                    timeOfArrival, timeOfDepature);
             System.out.println(infoOfFlight.get(1).toString());
         } else if (radOthers.isSelected()) {
             infoOfFlight.add(new Others(txtAirline.getText(),
                     txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                    dateOfArrival.getValue(), dateOfDeparture.getValue()));
+                    dateOfArrival.getValue(), dateOfDeparture.getValue()),
+                    timeOfArrival, timeOfDepature);
             System.out.println(infoOfFlight.get(2).toString());
         }
+            radInternational.setSelected(false);
+            radDomestic.setSelected(false);
+            radOthers.setSelected(false);
+            txtAirline.clear();
+            txtFlightNo.clear();
+            txtComesFrom.clear();
+            txtGoesTo.clear();
+            dateOfArrival.getEditor().clear();
+            dateOfDeparture.getEditor().clear();
 
-        radInternational.setSelected(false);
-        radDomestic.setSelected(false);
-        radOthers.setSelected(false);
-        txtAirline.clear();
-        txtFlightNo.clear();
-        txtComesFrom.clear();
-        txtGoesTo.clear();
-        dateOfArrival.getEditor().clear();
-        dateOfDeparture.getEditor().clear();
-
+        }
     }
 }
