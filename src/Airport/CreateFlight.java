@@ -196,42 +196,8 @@ public class CreateFlight extends Application {
         timeOfDepature = new TimeOfFlight(
                 cmbClockOfDeparture.getValue(), cmbMinutesOfDeparture.getValue());
 
-        System.out.println("arrival" + timeOfArrival);
-        System.out.println("departure" + timeOfDepature);
-
-        if (radInternational.isSelected()) {
-            infoOfFlight.add(new International("ProceedeXXX", txtAirline.getText(),
-                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
-                    timeOfArrival, timeOfDepature));
-            flightType = "International";
-//            System.out.println(infoOfFlight.get(0).toString());
-//            System.out.println("arrival" + timeOfArrival);
-//            System.out.println("departure" + timeOfDepature);
-
-//            new TimeOfFlight(cmbClockOfArrival.getValue(),cmbMinutesOfArrival.getValue()),
-//                    new TimeOfFlight(cmbClockOfDeparture.getValue(),cmbMinutesOfDeparture.getValue())
-//            International(String Custom, String Airline, String FlightNo, 
-//            String ARR, String DEP, LocalDate dateOfArrival, 
-//            LocalDate dateOfDeparture, TimeOfFlight timeOfArrival, 
-//            TimeOfFlight timeOfDepature) {
-        } else if (radDomestic.isSelected()) {
-            infoOfFlight.add(new Domestic(txtAirline.getText(),
-                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
-                    timeOfArrival, timeOfDepature));
-            flightType = "Domestic";
-
-//            System.out.println(infoOfFlight.get(1).toString());
-        } else if (radOthers.isSelected()) {
-            infoOfFlight.add(new Others(txtAirline.getText(),
-                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
-                    timeOfArrival, timeOfDepature));
-            flightType = "Cargo or Private";
-
-//            System.out.println(infoOfFlight.get(2).toString());
-        }
+        //show confirmation diologe first if the input is correct
+        //it will save to arraylist
         myAlert = new Alert(AlertType.CONFIRMATION);
         myAlert.setTitle("Confirm Create Flight");
         myAlert.setHeaderText("Confirm the infomation going to create");
@@ -242,6 +208,39 @@ public class CreateFlight extends Application {
                 + "\nGoes To: " + txtGoesTo.getText());
 
         myAlert.showAndWait();
+        /*
+        
+        need to code if user press okay will sign into array otherwise do nothing
+        
+        
+        
+        
+        */
+        
+        
+        
+        
+        if (radInternational.isSelected()) {
+            infoOfFlight.add(new International("ProceedeXXX", txtAirline.getText(),
+                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
+                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
+                    timeOfArrival, timeOfDepature));
+            flightType = "International";
+        } else if (radDomestic.isSelected()) {
+            infoOfFlight.add(new Domestic(txtAirline.getText(),
+                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
+                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
+                    timeOfArrival, timeOfDepature));
+            flightType = "Domestic";
+
+        } else if (radOthers.isSelected()) {
+            infoOfFlight.add(new Others(txtAirline.getText(),
+                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
+                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
+                    timeOfArrival, timeOfDepature));
+            flightType = "Cargo or Private";
+
+        }
 
         radInternational.setSelected(false);
         radDomestic.setSelected(false);
