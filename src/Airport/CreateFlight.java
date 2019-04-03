@@ -14,6 +14,8 @@ import javafx.event.EventTarget.*;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -54,6 +56,8 @@ public class CreateFlight extends Application {
     private ComboBox<String> cmbMinutesOfDeparture;
     private TimeOfFlight timeOfArrival;
     private TimeOfFlight timeOfDepature;
+    private Alert myAlert;
+    private String flightType;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -164,10 +168,10 @@ public class CreateFlight extends Application {
         txtGoesTo = new TextField();
         gridInfoPrompt.add(txtGoesTo, 1, 5, 2, 1);
 
-        Button btnTestDate = new Button("Create Flight");
-//        btnTestDate.setOnAction(event -> createFlight());
-        gridInfoPrompt.add(btnTestDate, 2, 6);
-        GridPane.setHalignment(btnTestDate, HPos.RIGHT);
+        Button btnCreateFlight = new Button("Create Flight");
+        btnCreateFlight.setOnAction(event -> createFlight());
+        gridInfoPrompt.add(btnCreateFlight, 2, 6);
+        GridPane.setHalignment(btnCreateFlight, HPos.RIGHT);
 
         flightStyle.getChildren()
                 .addAll(radInternational, radDomestic, radOthers);
@@ -181,8 +185,6 @@ public class CreateFlight extends Application {
         primaryStage.setScene(scene);
 
         primaryStage.show();
-
-        
 
     }
 
@@ -200,10 +202,12 @@ public class CreateFlight extends Application {
         if (radInternational.isSelected()) {
             infoOfFlight.add(new International("ProceedeXXX", txtAirline.getText(),
                     txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                    dateOfArrival.getValue(), dateOfDeparture.getValue()),
-                    timeOfArrival, timeOfDepature);
-            System.out.println("arrival" + timeOfArrival);
-            System.out.println("departure" + timeOfDepature);
+                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
+                    timeOfArrival, timeOfDepature));
+            flightType = "International";
+//            System.out.println(infoOfFlight.get(0).toString());
+//            System.out.println("arrival" + timeOfArrival);
+//            System.out.println("departure" + timeOfDepature);
 
 //            new TimeOfFlight(cmbClockOfArrival.getValue(),cmbMinutesOfArrival.getValue()),
 //                    new TimeOfFlight(cmbClockOfDeparture.getValue(),cmbMinutesOfDeparture.getValue())
@@ -211,31 +215,47 @@ public class CreateFlight extends Application {
 //            String ARR, String DEP, LocalDate dateOfArrival, 
 //            LocalDate dateOfDeparture, TimeOfFlight timeOfArrival, 
 //            TimeOfFlight timeOfDepature) {
-
-            System.out.println(infoOfFlight.get(0).toString());
         } else if (radDomestic.isSelected()) {
             infoOfFlight.add(new Domestic(txtAirline.getText(),
                     txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                    dateOfArrival.getValue(), dateOfDeparture.getValue()),
-                    timeOfArrival, timeOfDepature);
-            System.out.println(infoOfFlight.get(1).toString());
+                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
+                    timeOfArrival, timeOfDepature));
+            flightType = "Domestic";
+
+//            System.out.println(infoOfFlight.get(1).toString());
         } else if (radOthers.isSelected()) {
             infoOfFlight.add(new Others(txtAirline.getText(),
                     txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                    dateOfArrival.getValue(), dateOfDeparture.getValue()),
-                    timeOfArrival, timeOfDepature);
-            System.out.println(infoOfFlight.get(2).toString());
-        }
-            radInternational.setSelected(false);
-            radDomestic.setSelected(false);
-            radOthers.setSelected(false);
-            txtAirline.clear();
-            txtFlightNo.clear();
-            txtComesFrom.clear();
-            txtGoesTo.clear();
-            dateOfArrival.getEditor().clear();
-            dateOfDeparture.getEditor().clear();
+                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
+                    timeOfArrival, timeOfDepature));
+            flightType = "Cargo or Private";
 
+//            System.out.println(infoOfFlight.get(2).toString());
         }
+        myAlert = new Alert(AlertType.CONFIRMATION);
+        myAlert.setTitle("Confirm Create Flight");
+        myAlert.setHeaderText("Confirm the infomation going to create");
+        myAlert.setContentText("Type: " + flightType + "\nAirline: " + txtAirline.getText()
+                + "\nFlight no.: " + txtFlightNo.getText() + "\nScheduled Arrival Time: " + dateOfArrival.getValue()
+                + "    " + timeOfArrival + "\nScheduled Departure Time: " + dateOfDeparture.getValue()
+                + "    " + timeOfDepature + "\nComes From: " + txtComesFrom.getText()
+                + "\nGoes To: " + txtGoesTo.getText());
+
+        myAlert.showAndWait();
+
+        radInternational.setSelected(false);
+        radDomestic.setSelected(false);
+        radOthers.setSelected(false);
+        txtAirline.clear();
+        txtFlightNo.clear();
+        txtComesFrom.clear();
+        txtGoesTo.clear();
+        dateOfArrival.getEditor().clear();
+        dateOfDeparture.getEditor().clear();
+        cmbClockOfDeparture.getSelectionModel().select("");
+        cmbMinutesOfDeparture.getSelectionModel().select("");
+        cmbClockOfArrival.getSelectionModel().select("");
+        cmbMinutesOfArrival.getSelectionModel().select("");
+
     }
 }

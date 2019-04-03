@@ -37,7 +37,7 @@ public class TimeOfFlight {
     
     @Override
     public String toString(){
-        String format = "test %s clock %s minutes";
+        String format = " %s : %s ";
         return String.format(format, getClock(),getMinute());
     }
     
