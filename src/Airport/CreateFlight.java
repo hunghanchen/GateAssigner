@@ -7,6 +7,7 @@ import Airport.Flight.Others;
 import Airport.time.TimeOfFlight;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -198,7 +200,7 @@ public class CreateFlight extends Application {
 
         //show confirmation diologe first if the input is correct
         //it will save to arraylist
-        myAlert = new Alert(AlertType.CONFIRMATION);
+        myAlert = new Alert(AlertType.CONFIRMATION,"",ButtonType.YES,ButtonType.NO);
         myAlert.setTitle("Confirm Create Flight");
         myAlert.setHeaderText("Confirm the infomation going to create");
         myAlert.setContentText("Type: " + flightType + "\nAirline: " + txtAirline.getText()
@@ -207,20 +209,11 @@ public class CreateFlight extends Application {
                 + "    " + timeOfDepature + "\nComes From: " + txtComesFrom.getText()
                 + "\nGoes To: " + txtGoesTo.getText());
 
-        myAlert.showAndWait();
-        /*
         
-        need to code if user press okay will sign into array otherwise do nothing
+        Optional<ButtonType> result = myAlert.showAndWait();
         
-        
-        
-        
-        */
-        
-        
-        
-        
-        if (radInternational.isSelected()) {
+        if(result.isPresent()&&result.get()==ButtonType.YES){
+             if (radInternational.isSelected()) {
             infoOfFlight.add(new International("ProceedeXXX", txtAirline.getText(),
                     txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
                     dateOfArrival.getValue(), dateOfDeparture.getValue(),
@@ -241,6 +234,18 @@ public class CreateFlight extends Application {
             flightType = "Cargo or Private";
 
         }
+            
+        }else{
+            /*
+            return null
+            */
+        }
+       
+        
+        
+        
+        
+       
 
         radInternational.setSelected(false);
         radDomestic.setSelected(false);
