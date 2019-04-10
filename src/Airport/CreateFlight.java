@@ -5,9 +5,13 @@ import Airport.Flight.Flight;
 import Airport.Flight.International;
 import Airport.Flight.Others;
 import Airport.time.TimeOfFlight;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,6 +34,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -60,6 +66,14 @@ public class CreateFlight extends Application {
     private TimeOfFlight timeOfDepature;
     private Alert myAlert;
     private String flightType;
+    private JSONObject jsonObj_International;
+    private JSONObject jsonObj_Domestic;
+    private JSONObject jsonObj_Others;
+    private JSONObject jsonObj_AssignInfo;
+    private JSONObject jsonObj_Root;
+    private JSONArray jsonArr__International;
+    private JSONArray jsonArr__Domestic;
+    private JSONArray jsonArr__Others;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -174,12 +188,16 @@ public class CreateFlight extends Application {
         btnCreateFlight.setOnAction(event -> createFlight());
         gridInfoPrompt.add(btnCreateFlight, 2, 6);
         GridPane.setHalignment(btnCreateFlight, HPos.RIGHT);
+        
+        Button btnAssignGate = new Button ("Assign Gate");
 
         flightStyle.getChildren()
                 .addAll(radInternational, radDomestic, radOthers);
         flightStyle.setAlignment(Pos.CENTER);
         layOut.getChildren().addAll(lblGateAssigner, flightStyle, gridInfoPrompt);
         layOut.setAlignment(Pos.CENTER);
+        
+        
 
         Scene scene = new Scene(layOut, 550, 400);
 
@@ -192,6 +210,21 @@ public class CreateFlight extends Application {
 
     public void createFlight() {
 
+        //create the file first and then can store the data we input
+        File file = new File("Create Flight");
+
+        try {
+            file.createNewFile();
+        } catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
+
+        //create json root object international, domsetic, otehrs
+        jsonObj_Root = new JSONObject();
+//        jsonObj_International = new JSONObject();
+//        jsonObj_Domestic = new JSONObject();
+//        jsonObj_Others = new JSONObject();
+
         timeOfArrival = new TimeOfFlight(cmbClockOfArrival.getValue(),
                 cmbMinutesOfArrival.getValue());
 
@@ -200,7 +233,7 @@ public class CreateFlight extends Application {
 
         //show confirmation diologe first if the input is correct
         //it will save to arraylist
-        myAlert = new Alert(AlertType.CONFIRMATION,"",ButtonType.YES,ButtonType.NO);
+        myAlert = new Alert(AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
         myAlert.setTitle("Confirm Create Flight");
         myAlert.setHeaderText("Confirm the infomation going to create");
         myAlert.setContentText("Type: " + flightType + "\nAirline: " + txtAirline.getText()
@@ -209,43 +242,40 @@ public class CreateFlight extends Application {
                 + "    " + timeOfDepature + "\nComes From: " + txtComesFrom.getText()
                 + "\nGoes To: " + txtGoesTo.getText());
 
-        
         Optional<ButtonType> result = myAlert.showAndWait();
-        
-        if(result.isPresent()&&result.get()==ButtonType.YES){
-             if (radInternational.isSelected()) {
-            infoOfFlight.add(new International("ProceedeXXX", txtAirline.getText(),
-                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
-                    timeOfArrival, timeOfDepature));
-            flightType = "International";
-        } else if (radDomestic.isSelected()) {
-            infoOfFlight.add(new Domestic(txtAirline.getText(),
-                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
-                    timeOfArrival, timeOfDepature));
-            flightType = "Domestic";
 
-        } else if (radOthers.isSelected()) {
-            infoOfFlight.add(new Others(txtAirline.getText(),
-                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
-                    timeOfArrival, timeOfDepature));
-            flightType = "Cargo or Private";
+        if (result.isPresent() && result.get() == ButtonType.YES) {
+            if (radInternational.isSelected()) {
+                infoOfFlight.add(new International("ProceedeXXX", txtAirline.getText(),
+                        txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
+                        dateOfArrival.getValue(), dateOfDeparture.getValue(),
+                        timeOfArrival, timeOfDepature));
+                flightType = "International";
+                System.out.println(infoOfFlight.get(0).toString());
+                //putinto assign data into jsonObj
+//                jsonObj_AssignInfo.put("Airline: ", )
+                
+
+            } else if (radDomestic.isSelected()) {
+                infoOfFlight.add(new Domestic(txtAirline.getText(),
+                        txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
+                        dateOfArrival.getValue(), dateOfDeparture.getValue(),
+                        timeOfArrival, timeOfDepature));
+                flightType = "Domestic";
+
+            } else if (radOthers.isSelected()) {
+                infoOfFlight.add(new Others(txtAirline.getText(),
+                        txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
+                        dateOfArrival.getValue(), dateOfDeparture.getValue(),
+                        timeOfArrival, timeOfDepature));
+                flightType = "Cargo or Private";
+
+            }
+
+        } else {
+            return;
 
         }
-            
-        }else{
-            /*
-            return null
-            */
-        }
-       
-        
-        
-        
-        
-       
 
         radInternational.setSelected(false);
         radDomestic.setSelected(false);
@@ -262,4 +292,6 @@ public class CreateFlight extends Application {
         cmbMinutesOfArrival.getSelectionModel().select("");
 
     }
+
+//    public void createFlightArrayJson
 }
