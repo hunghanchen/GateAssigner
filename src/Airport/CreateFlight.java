@@ -33,6 +33,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -66,6 +67,7 @@ public class CreateFlight extends Application {
     private TimeOfFlight timeOfDepature;
     private Alert myAlert;
     private String flightType;
+    private Stage primaryStage;
     private JSONObject jsonObj_International;
     private JSONObject jsonObj_Domestic;
     private JSONObject jsonObj_Others;
@@ -77,6 +79,7 @@ public class CreateFlight extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
 
         VBox layOut = new VBox(10);
         HBox flightStyle = new HBox(3);
@@ -188,27 +191,30 @@ public class CreateFlight extends Application {
         btnCreateFlight.setOnAction(event -> createFlight());
         gridInfoPrompt.add(btnCreateFlight, 2, 6);
         GridPane.setHalignment(btnCreateFlight, HPos.RIGHT);
-        
-        Button btnAssignGate = new Button ("Assign Gate");
+
+        Button btnAssignGate = new Button("Assign Gate");
+        btnAssignGate.setPrefWidth(100.0);
+        btnAssignGate.setPrefHeight(80.0);
+        btnAssignGate.setTextAlignment(TextAlignment.CENTER);
+        gridInfoPrompt.add(btnAssignGate, 0, 7);
+        btnAssignGate.setOnAction(event -> assignGate());
 
         flightStyle.getChildren()
                 .addAll(radInternational, radDomestic, radOthers);
         flightStyle.setAlignment(Pos.CENTER);
         layOut.getChildren().addAll(lblGateAssigner, flightStyle, gridInfoPrompt);
         layOut.setAlignment(Pos.CENTER);
-        
-        
 
         Scene scene = new Scene(layOut, 550, 400);
 
-        primaryStage.setTitle("Create Flight");
+        primaryStage.setTitle("Create Flight and Assign Gate");
         primaryStage.setScene(scene);
 
         primaryStage.show();
 
     }
 
-    public void createFlight() {
+    private void createFlight() {
 
         //create the file first and then can store the data we input
         File file = new File("Create Flight");
@@ -254,7 +260,6 @@ public class CreateFlight extends Application {
                 System.out.println(infoOfFlight.get(0).toString());
                 //putinto assign data into jsonObj
 //                jsonObj_AssignInfo.put("Airline: ", )
-                
 
             } else if (radDomestic.isSelected()) {
                 infoOfFlight.add(new Domestic(txtAirline.getText(),
@@ -290,6 +295,17 @@ public class CreateFlight extends Application {
         cmbMinutesOfDeparture.getSelectionModel().select("");
         cmbClockOfArrival.getSelectionModel().select("");
         cmbMinutesOfArrival.getSelectionModel().select("");
+
+    }
+
+    private void assignGate() {
+        
+
+        GateAssigner getGateAssigner = new GateAssigner();
+//        getGateAssigner.setTitle("Assign Gate");
+//        
+//
+//        primaryStage.sizeToScene();
 
     }
 
