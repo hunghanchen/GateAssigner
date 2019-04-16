@@ -38,7 +38,8 @@ public final class GateAssigner extends Stage {
     private ComboBox<String> cmbFlight;
     private File file;
     private StringBuilder allFileContent;
-    private Label lblFlightShowInfo ;
+    private Label lblFlightShowInfo;
+    private Label lblGateNum;
 
     private static final int GATE_SIZE = 5;
     private static final int DATE_SIZE = 2;
@@ -66,7 +67,7 @@ public final class GateAssigner extends Stage {
 
         lblFlightShowInfo = new Label();
 
-        Label lblGateNum = new Label("gate no go here");
+        lblGateNum = new Label();
 
         hboxFlightInfo.getChildren().addAll(lblFlightInfo, cmbFlight, btnSearchFlight);
         hboxFlightInfo.setAlignment(Pos.CENTER);
@@ -84,25 +85,58 @@ public final class GateAssigner extends Stage {
 
         file = new File("Flight Information.txt");
 
-        try {
-            allFileContent= new StringBuilder();
+        try (RandomAccessFile raf = new RandomAccessFile("AprilSecduleDate.dat", "r")) {
+            allFileContent = new StringBuilder();
             Scanner fileContent = new Scanner(file);
             while (fileContent.hasNextLine()) {
-                allFileContent.append(fileContent.nextLine()).append("\n");               
+                allFileContent.append(fileContent.nextLine()).append("\n");
             }
             String partContentBeforSplit = String.valueOf(allFileContent);
             String[] partContentAfterSplit = partContentBeforSplit.split("\n");
             lblFlightShowInfo.setText(partContentAfterSplit[itemSelectNumIndex]);
+            System.out.println("partContentAfterSplit[itemSelectNumIndex]" + partContentAfterSplit[itemSelectNumIndex]);
+            String[] strFlightAllInfo = partContentAfterSplit[itemSelectNumIndex].split(",");
+            System.out.println(strFlightAllInfo[4].trim().substring(0, 2));
 
+            int convertDateStringToInt = Integer.valueOf(strFlightAllInfo[3].trim().substring(8));
+            int convertClockStringToInt = Integer.valueOf(strFlightAllInfo[4].trim().substring(0, 2));
+            int convertFlightNoStringToInt = Integer.valueOf(strFlightAllInfo[2].trim());
+            System.out.println("convertDateStringToInt" + convertDateStringToInt);
+            System.out.println("convertClockStringToInt" + convertClockStringToInt);
 
+            raf.seek(0);
+            raf.skipBytes((GATE_SIZE * 2)
+                    + ((DATE_SIZE * 2 + CLOCK_SIZE * 24) * (convertDateStringToInt - 1))
+                    + (DATE_SIZE * 2) + (convertClockStringToInt * CLOCK_SIZE));
+            if (raf.readInt() == convertFlightNoStringToInt) {
+//                raf.seek(0);
+//                raf.skipBytes((GATE_SIZE * 2)
+//                        + ((DATE_SIZE * 2 + CLOCK_SIZE * 24) * (convertDateStringToInt - 1))
+//                        + (DATE_SIZE * 2) + (convertClockStringToInt * CLOCK_SIZE));
 
-            }catch (FileNotFoundException ex) {
+                lblGateNum.setText("Go to Gate 1");
+
+//                raf.writeInt(intArrConvertStrNumberToInt[i]);
+            } else {
+                raf.seek(RECORD_SIZE);
+                raf.skipBytes((GATE_SIZE * 2)
+                        + ((DATE_SIZE * 2 + CLOCK_SIZE * 24) * (convertDateStringToInt - 1))
+                        + (DATE_SIZE * 2) + (convertClockStringToInt * CLOCK_SIZE));
+                lblGateNum.setText("Go to Gate 2");
+            }
+
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.toString());
+        } catch (IOException ex) {
             System.out.println(ex.toString());
         }
+//        try (RandomAccessFile raf = new RandomAccessFile("AprilSecduleDate.dat", "r")) {
+//            
+//        } catch (IOException ex) {
+//            System.out.println(ex.toString());
+//        }
 
-        }
-
-    
+    }
 
     private String[] ArrFlightInfo() {
 
@@ -118,10 +152,6 @@ public final class GateAssigner extends Stage {
             Scanner fileFlight = new Scanner(file);
             while (fileFlight.hasNextLine()) {
                 part = fileFlight.nextLine().split(",");
-//                String flightAssign = part[0].trim();
-//                String flight = part[0] + "," + part[1] + "," + part[2];
-
-                //we need to put in the combox only need for the three character of the flight type
                 for (int j = 0; j < 3; j++) {
                     String flightType = part[0].trim();
                     charFlight = flightType.charAt(j);
@@ -256,8 +286,6 @@ public final class GateAssigner extends Stage {
                             + (DATE_SIZE * 2) + (intArrFlightAssignArrivalTime[i] * CLOCK_SIZE));
                     System.out.println("This is raf" + raf.readInt());
 
-//                    i++;
-//                    System.out.println(intArrConvertStrArrDateToInt[0]);
 //                String flight = part[0] + "," + part[1] + "," + part[2];
                     //we need to put in the combox only need for the three character of the flight type
 //                    for (int j = 0; j < 3; j++) {
@@ -281,7 +309,6 @@ public final class GateAssigner extends Stage {
 //                    i++;
 //                    builderFlightInfo.setLength(0);
                 }
-
             } catch (FileNotFoundException ex) {
                 System.out.println(ex.toString());
             }
