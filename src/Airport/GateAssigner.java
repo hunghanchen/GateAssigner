@@ -2,6 +2,8 @@ package Airport;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +34,12 @@ import javafx.stage.Stage;
  * @author paulbonenfant
  */
 public final class GateAssigner extends Stage {
+
+    private static final int GATE_SIZE = 5;
+    private static final int DATE_SIZE = 2;
+    private static final int CLOCK_SIZE = 4;
+
+    private static final int RECORD_SIZE = (GATE_SIZE * 2) + (DATE_SIZE * 2 * 30) + (CLOCK_SIZE * 24 * 30);
 
     public GateAssigner() {
 
@@ -68,6 +76,7 @@ public final class GateAssigner extends Stage {
         char charFlight;
         char charFlightName;
         StringBuilder builderFlightInfo = new StringBuilder();
+        CreateRandomAccessFileAndAssignTime();
 
 //        String[] xs = new String[]{"a", "b", "c", "d"};
 //        return xs;
@@ -111,6 +120,7 @@ public final class GateAssigner extends Stage {
 
     private void CreateRandomAccessFileAndAssignTime() {
         // create the april 30 days array (we only use the april)
+        String[] gate = {"Gate1", "Gate2"};
         Integer[] intArrayDate = new Integer[30];
         for (int i = 0; i < intArrayDate.length; i++) {
             intArrayDate[i] = i + 1;
@@ -124,8 +134,32 @@ public final class GateAssigner extends Stage {
             }
         }
         int[] clock = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        
-        
+
+        try (RandomAccessFile raf = new RandomAccessFile("AprilSecduleDate.dat", "rw")) {
+
+            for (int k = 0; k < gate.length; k++) {
+                raf.writeChars(gate[k]);
+                for (int i = 0; i < strArrayDate.length; i++) {
+                    raf.writeChars(strArrayDate[i]);
+                    for (int j = 0; j < clock.length; j++) {
+                        raf.writeInt(clock[j]);
+                    }
+                }
+            }
+            raf.seek(RECORD_SIZE);
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < GATE_SIZE; i++) {
+                builder.append(raf.readChar());
+            }
+            System.out.println(builder);
+            //------------------------------------------(above is create the standard)
+
+            File file = new File("Flight Information.txt");
+            
+
+        } catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
 
     }
 }
