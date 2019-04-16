@@ -238,7 +238,7 @@ public class CreateFlight extends Application {
         myAlert = new Alert(AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
         myAlert.setTitle("Confirm Create Flight");
         myAlert.setHeaderText("Confirm the infomation going to create");
-        myAlert.setContentText("Type: " + flightType + "\nAirline: " + txtAirline.getText()
+        myAlert.setContentText( "Airline: " + txtAirline.getText()
                 + "\nFlight no.: " + txtFlightNo.getText() + "\nScheduled Arrival Time: " + dateOfArrival.getValue()
                 + "    " + timeOfArrival + "\nScheduled Departure Time: " + dateOfDeparture.getValue()
                 + "    " + timeOfDepature + "\nComes From: " + txtComesFrom.getText()
