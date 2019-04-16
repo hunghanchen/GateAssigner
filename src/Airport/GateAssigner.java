@@ -42,6 +42,7 @@ public final class GateAssigner extends Stage {
     private static final int RECORD_SIZE = (GATE_SIZE * 2) + (DATE_SIZE * 2 * 30) + (CLOCK_SIZE * 24 * 30);
 
     public GateAssigner() {
+        CreateRandomAccessFileAndAssignTime();
 
         // here is the gate assigner stage when user in the create flight stage 
         // click gate assign button will bump out this stage
@@ -56,6 +57,7 @@ public final class GateAssigner extends Stage {
         cmbFlight.setItems(flightList);
 
         Button btnSearchFlight = new Button("Search");
+        
         hboxFlightInfo.getChildren().addAll(lblFlightInfo, cmbFlight, btnSearchFlight);
         hboxFlightInfo.setAlignment(Pos.CENTER);
 
@@ -76,7 +78,6 @@ public final class GateAssigner extends Stage {
         char charFlight;
         char charFlightName;
         StringBuilder builderFlightInfo = new StringBuilder();
-        CreateRandomAccessFileAndAssignTime();
 
         try {
             Scanner fileFlight = new Scanner(file);
@@ -205,8 +206,15 @@ public final class GateAssigner extends Stage {
                         raf.writeInt(intArrConvertStrNumberToInt[i]);
                     }
 
-                    //write arrival date to raf
+                    //for test only ingnore later
                     raf.seek(0);
+
+                    raf.skipBytes((GATE_SIZE * 2)
+                            + ((DATE_SIZE * 2 + CLOCK_SIZE * 24) * (intArrConvertStrDepDateToInt[i] - 1))
+                            + (DATE_SIZE * 2) + (intArrFlightAssignArrivalTime[i] * CLOCK_SIZE));
+                    System.out.println("This is raf" + raf.readInt());
+
+                    raf.seek(RECORD_SIZE);
 
                     raf.skipBytes((GATE_SIZE * 2)
                             + ((DATE_SIZE * 2 + CLOCK_SIZE * 24) * (intArrConvertStrDepDateToInt[i] - 1))
