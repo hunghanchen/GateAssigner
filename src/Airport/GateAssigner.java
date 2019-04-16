@@ -35,6 +35,11 @@ import javafx.stage.Stage;
  */
 public final class GateAssigner extends Stage {
 
+    private ComboBox<String> cmbFlight;
+    private File file;
+    private StringBuilder allFileContent;
+    private Label lblFlightShowInfo ;
+
     private static final int GATE_SIZE = 5;
     private static final int DATE_SIZE = 2;
     private static final int CLOCK_SIZE = 4;
@@ -52,26 +57,56 @@ public final class GateAssigner extends Stage {
 
         HBox hboxFlightInfo = new HBox(3);
         Label lblFlightInfo = new Label("Flight Info");
-        ComboBox<String> cmbFlight = new ComboBox<>();
+        cmbFlight = new ComboBox<>();
         ObservableList flightList = FXCollections.observableArrayList(ArrFlightInfo());
         cmbFlight.setItems(flightList);
 
         Button btnSearchFlight = new Button("Search");
-        
+        btnSearchFlight.setOnAction(event -> showInfo_AssignGate());
+
+        lblFlightShowInfo = new Label();
+
+        Label lblGateNum = new Label("gate no go here");
+
         hboxFlightInfo.getChildren().addAll(lblFlightInfo, cmbFlight, btnSearchFlight);
         hboxFlightInfo.setAlignment(Pos.CENTER);
 
         root.setAlignment(Pos.CENTER);
-        root.getChildren().addAll(lblGateAssign, hboxFlightInfo);
+        root.getChildren().addAll(lblGateAssign, hboxFlightInfo, lblFlightShowInfo, lblGateNum);
 
         setScene(new Scene(root, 550, 400));
 
         setTitle("Enter New Title Info");
     }
 
+    private void showInfo_AssignGate() {
+        int itemSelectNumIndex = cmbFlight.getSelectionModel().getSelectedIndex();//know which index of item they select and grab from file
+
+        file = new File("Flight Information.txt");
+
+        try {
+            allFileContent= new StringBuilder();
+            Scanner fileContent = new Scanner(file);
+            while (fileContent.hasNextLine()) {
+                allFileContent.append(fileContent.nextLine()).append("\n");               
+            }
+            String partContentBeforSplit = String.valueOf(allFileContent);
+            String[] partContentAfterSplit = partContentBeforSplit.split("\n");
+            lblFlightShowInfo.setText(partContentAfterSplit[itemSelectNumIndex]);
+
+
+
+            }catch (FileNotFoundException ex) {
+            System.out.println(ex.toString());
+        }
+
+        }
+
+    
+
     private String[] ArrFlightInfo() {
 
-        File file = new File("Flight Information.txt");
+        file = new File("Flight Information.txt");
         String[] part = new String[100];
         String[] outputPart = new String[20];
         int i = 0;
