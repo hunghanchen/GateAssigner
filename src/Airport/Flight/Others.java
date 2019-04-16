@@ -90,10 +90,10 @@ public class Others extends Flight{
     @Override
     public String toString() {
 
-        String format = "This Flight is Cargo or Private %s Flight and Flight no is %s Arrival"
-                + " arrival time is %tF and departure time is %tF"
-                + "comes from %s and goes to %s";
-        return String.format(format, Airline, FlightNo, dateOfArrival, dateOfDeparture, ARR, DEP);
+        String format = "Others, %s, %s, %tF, %s,%tF, %s, %s, %s";
+
+        return String.format(format, Airline, FlightNo, dateOfArrival,timeOfArrival
+                ,dateOfDeparture,timeOfDepature, ARR, DEP);
 
     }
       @Override

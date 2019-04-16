@@ -1,5 +1,3 @@
-
-
 package Airport.Flight;
 
 import Airport.time.TimeOfFlight;
@@ -30,8 +28,6 @@ public class Domestic extends Flight {
     public void setTimeOfDepature(TimeOfFlight timeOfDepature) {
         this.timeOfDepature = timeOfDepature;
     }
-
-    
 
     public String getAirline() {
         return Airline;
@@ -80,23 +76,24 @@ public class Domestic extends Flight {
     public void setDateOfDeparture(LocalDate dateOfDeparture) {
         this.dateOfDeparture = dateOfDeparture;
     }
-    
 
-     @Override
+    @Override
     public String toString() {
 
-        String format = "This Flight is Domestic %s Flight and Flight no is %s Arrival"
-                + " arrival time is %tF and departure time is %tF"
-                + "comes from %s and goes to %s";
-        return String.format(format, Airline, FlightNo, dateOfArrival, dateOfDeparture, ARR, DEP);
+        String format = "Domestic, %s, %s, %tF, %s,%tF, %s, %s, %s";
+
+        return String.format(format, Airline, FlightNo, dateOfArrival,timeOfArrival
+                ,dateOfDeparture,timeOfDepature, ARR, DEP);
 
     }
-      @Override
-    public void landed(String FlightNo){
-        System.out.println("Domestic Flight, Flight Number "+FlightNo+" is landed");
-    }
+
     @Override
-    public void takingoff(String FlightNo){
-        System.out.println("Domestic Flight, Flight Number"+FlightNo+"is Taking Off");
+    public void landed(String FlightNo) {
+        System.out.println("Domestic Flight, Flight Number " + FlightNo + " is landed");
+    }
+
+    @Override
+    public void takingoff(String FlightNo) {
+        System.out.println("Domestic Flight, Flight Number" + FlightNo + "is Taking Off");
     }
 }

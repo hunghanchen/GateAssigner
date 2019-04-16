@@ -6,7 +6,10 @@ import Airport.Flight.International;
 import Airport.Flight.Others;
 import Airport.time.TimeOfFlight;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -76,6 +79,7 @@ public class CreateFlight extends Application {
     private JSONArray jsonArr__International;
     private JSONArray jsonArr__Domestic;
     private JSONArray jsonArr__Others;
+    private StringBuilder builderFlightInfo;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -217,14 +221,6 @@ public class CreateFlight extends Application {
     private void createFlight() {
 
         //create the file first and then can store the data we input
-        File file = new File("Create Flight");
-
-        try {
-            file.createNewFile();
-        } catch (IOException ex) {
-            System.out.println(ex.toString());
-        }
-
         //create json root object international, domsetic, otehrs
         jsonObj_Root = new JSONObject();
 //        jsonObj_International = new JSONObject();
@@ -257,7 +253,7 @@ public class CreateFlight extends Application {
                         dateOfArrival.getValue(), dateOfDeparture.getValue(),
                         timeOfArrival, timeOfDepature));
                 flightType = "International";
-                System.out.println(infoOfFlight.get(0).toString());
+//                System.out.println(infoOfFlight.get(0).toString());
                 //putinto assign data into jsonObj
 //                jsonObj_AssignInfo.put("Airline: ", )
 
@@ -299,15 +295,39 @@ public class CreateFlight extends Application {
     }
 
     private void assignGate() {
-        
+
+        builderFlightInfo = new StringBuilder();
+
+        for (Flight f : infoOfFlight) {
+            builderFlightInfo.append(f).append("\n");
+        }
+
+        System.out.println(builderFlightInfo);
+
+        File file = new File("Flight Information.txt");
+
+        try {
+            file.createNewFile();
+        } catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
+
+        try (FileWriter fileWriter = new FileWriter(file, true);
+                PrintWriter writer = new PrintWriter(fileWriter)) {
+            writer.print(builderFlightInfo);
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.toString());
+        } catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
 
         GateAssigner getGateAssigner = new GateAssigner();
-//        getGateAssigner.setTitle("Assign Gate");
-//        
-//
-//        primaryStage.sizeToScene();
+
+        primaryStage.setScene(getGateAssigner.getScene());
 
     }
 
-//    public void createFlightArrayJson
+    public void createFlightArrayJson() {
+
+    }
 }

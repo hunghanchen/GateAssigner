@@ -130,10 +130,7 @@ public class Flight {
 //    }
     @Override
     public String toString() {
-
-        String format = "This Flight is International %s Flight and Flight no is %s Arrival"
-                + " arrival time is %tF and departure time is %tF"
-                + "comes from %s and goes to %s";
+        String format = "%s, %s, %tF, %tF, %s, %s\n";
         return String.format(format, Airline, FlightNo, dateOfArrival, dateOfDeparture, ARR, DEP);
 
     }

@@ -1,0 +1,4 @@
+International, turkish, 3453, 2019-04-01, 2019-04-01, tur, tur
+Others, cargo, 5434, 2019-04-03, 2019-04-03, otehr, other
+Domestic, canada, 434, 2019-04-04, 2019-04-25, dom, dom
+International, taiwan, 2332, 2019-04-19, 2019-04-16, afi, tai
