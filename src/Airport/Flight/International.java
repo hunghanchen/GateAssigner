@@ -11,7 +11,7 @@ public class International extends Flight {
 
     protected String Custom;
 
-    public International(String Custom, String Airline, String FlightNo,
+    public International(String Airline, String FlightNo,
             String ARR, String DEP, LocalDate dateOfArrival,
             LocalDate dateOfDeparture, TimeOfFlight timeOfArrival,
             TimeOfFlight timeOfDepature) {

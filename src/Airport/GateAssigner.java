@@ -49,6 +49,7 @@ public final class GateAssigner extends Stage {
     private Label lblGateNum;
     private String[] fields = new String[9];
     private Scanner fileFlight;
+    TableColumn columnF1 = new TableColumn("Type");
 
     private TableView<Record> tableView = new TableView<>();
 
@@ -84,10 +85,19 @@ public final class GateAssigner extends Stage {
         lblGateNum = new Label();
 
         Button btnFilterInternational = new Button("International");
+        btnFilterInternational.setOnAction(event -> onlyShowInternational());
+
         Button btnFilterDomestic = new Button("Domestic");
+        btnFilterDomestic.setOnAction(event -> onlyShowDomestic());
+
         Button btnFilterOthers = new Button("Others");
+        btnFilterOthers.setOnAction(event -> onlyShowOthers());
+
+        Button btnShowAll = new Button("Show All");
+        btnShowAll.setOnAction(event -> readFile());
+
         VBox vBoxFlightType = new VBox(3);
-        vBoxFlightType.getChildren().addAll(btnFilterInternational, btnFilterDomestic, btnFilterOthers);
+        vBoxFlightType.getChildren().addAll(btnFilterInternational, btnFilterDomestic, btnFilterOthers, btnShowAll);
         vBoxFlightType.setSpacing(20);
 
         Button btnFilterGate1 = new Button("Gate1");
@@ -136,11 +146,15 @@ public final class GateAssigner extends Stage {
         columnF9.setCellValueFactory(
                 new PropertyValueFactory<>("f9"));
 
+        TableColumn columnF10 = new TableColumn("Gate No.");
+        columnF10.setCellValueFactory(
+                new PropertyValueFactory<>("f10"));
+
         tableView.setItems(dataList);
         tableView.getColumns().addAll(
                 columnF1, columnF2, columnF3,
                 columnF4, columnF5, columnF6,
-                columnF7, columnF8, columnF9);
+                columnF7, columnF8, columnF9, columnF10);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         HBox hBoxFlightFilterSection = new HBox(3);
@@ -401,9 +415,8 @@ public final class GateAssigner extends Stage {
     }
 
     public class Record {
-        //Assume each record have 6 elements, all String
 
-        private SimpleStringProperty f1, f2, f3, f4, f5, f6, f7, f8, f9;
+        private SimpleStringProperty f1, f2, f3, f4, f5, f6, f7, f8, f9, f10;
 
         public String getF1() {
             return f1.get();
@@ -441,9 +454,13 @@ public final class GateAssigner extends Stage {
             return f9.get();
         }
 
+        public String getF10() {
+            return f10.get();
+        }
+
         Record(String f1, String f2, String f3, String f4,
                 String f5, String f6, String f7, String f8,
-                String f9) {
+                String f9, String f10) {
             this.f1 = new SimpleStringProperty(f1);
             this.f2 = new SimpleStringProperty(f2);
             this.f3 = new SimpleStringProperty(f3);
@@ -453,6 +470,7 @@ public final class GateAssigner extends Stage {
             this.f7 = new SimpleStringProperty(f7);
             this.f8 = new SimpleStringProperty(f8);
             this.f9 = new SimpleStringProperty(f9);
+            this.f10 = new SimpleStringProperty(f10);
 
         }
 
@@ -467,7 +485,7 @@ public final class GateAssigner extends Stage {
                 Record record = new Record(fields[0].trim(), fields[1].trim().toUpperCase(),
                         fields[2].trim(), fields[3].trim(), fields[4].trim(),
                         fields[5].trim(), fields[6].trim(), fields[7].trim(),
-                        fields[8].trim());
+                        fields[8].trim(),GateNo());
                 dataList.add(record);
 
             }
@@ -476,8 +494,75 @@ public final class GateAssigner extends Stage {
         }
 
     }
-    
-   
+
+    private void onlyShowInternational() {
+
+        dataList.clear();
+
+        try {
+            fileFlight = new Scanner(file);
+            while (fileFlight.hasNext()) {
+                fields = fileFlight.nextLine().split(",");
+                if (fields[0].trim().equalsIgnoreCase("International")) {
+                    Record record = new Record(fields[0].trim(), fields[1].trim().toUpperCase(),
+                            fields[2].trim(), fields[3].trim(), fields[4].trim(),
+                            fields[5].trim(), fields[6].trim(), fields[7].trim(),
+                            fields[8].trim(),GateNo());
+                    dataList.add(record);
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.toString());
+        }
+    }
+
+    private void onlyShowDomestic() {
+
+        dataList.clear();
+
+        try {
+            fileFlight = new Scanner(file);
+            while (fileFlight.hasNext()) {
+                fields = fileFlight.nextLine().split(",");
+                if (fields[0].trim().equalsIgnoreCase("Domestic")) {
+                    Record record = new Record(fields[0].trim(), fields[1].trim().toUpperCase(),
+                            fields[2].trim(), fields[3].trim(), fields[4].trim(),
+                            fields[5].trim(), fields[6].trim(), fields[7].trim(),
+                            fields[8].trim(),GateNo());
+                    dataList.add(record);
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.toString());
+        }
+    }
+
+    private void onlyShowOthers() {
+
+        dataList.clear();
+
+        try {
+            fileFlight = new Scanner(file);
+            while (fileFlight.hasNext()) {
+                fields = fileFlight.nextLine().split(",");
+                if (fields[0].trim().equalsIgnoreCase("Others")) {
+                    Record record = new Record(fields[0].trim(), fields[1].trim().toUpperCase(),
+                            fields[2].trim(), fields[3].trim(), fields[4].trim(),
+                            fields[5].trim(), fields[6].trim(), fields[7].trim(),
+                            fields[8].trim(),GateNo());
+                    dataList.add(record);
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.toString());
+        }
+    }
+
+    private String GateNo() {
+        
+
+        return "5";
+    }
 
     private int numOfFlight() {
         int numOfFlight = 1;

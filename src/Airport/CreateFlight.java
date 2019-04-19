@@ -20,7 +20,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventTarget.*;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -36,6 +38,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.json.simple.JSONArray;
@@ -52,7 +56,7 @@ public class CreateFlight extends Application {
 
     }
 
-    ArrayList<Flight> infoOfFlight = new ArrayList<>();
+    private ArrayList<Flight> infoOfFlight = new ArrayList<>();
     private RadioButton radInternational;
     private RadioButton radDomestic;
     private RadioButton radOthers;
@@ -69,20 +73,12 @@ public class CreateFlight extends Application {
     private TimeOfFlight timeOfArrival;
     private TimeOfFlight timeOfDepature;
     private Alert myAlert;
-    private String flightType;
     private Stage primaryStage;
-    private JSONObject jsonObj_International;
-    private JSONObject jsonObj_Domestic;
-    private JSONObject jsonObj_Others;
-    private JSONObject jsonObj_AssignInfo;
-    private JSONObject jsonObj_Root;
-    private JSONArray jsonArr__International;
-    private JSONArray jsonArr__Domestic;
-    private JSONArray jsonArr__Others;
     private StringBuilder builderFlightInfo;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         this.primaryStage = primaryStage;
 
         VBox layOut = new VBox(10);
@@ -91,6 +87,7 @@ public class CreateFlight extends Application {
         gridInfoPrompt.setAlignment(Pos.CENTER);
 
         Label lblGateAssigner = new Label("Create Flight");
+        lblGateAssigner.setFont((Font.font("Verdana", 20)));
 
         radInternational = new RadioButton("International");
         radDomestic = new RadioButton("Domestic");
@@ -201,15 +198,22 @@ public class CreateFlight extends Application {
         btnAssignGate.setPrefHeight(80.0);
         btnAssignGate.setTextAlignment(TextAlignment.CENTER);
         gridInfoPrompt.add(btnAssignGate, 0, 7);
-        btnAssignGate.setOnAction(event -> assignGate());
+        gridInfoPrompt.setVgap(5);
+        gridInfoPrompt.setHgap(5);
 
+        btnAssignGate.setOnAction(event -> AssignGate());
+
+//        Button btnNewOne = new Button("New One");
+//        btnAssignGate.setOnAction(event -> NewOne());
         flightStyle.getChildren()
                 .addAll(radInternational, radDomestic, radOthers);
         flightStyle.setAlignment(Pos.CENTER);
+        flightStyle.setSpacing(25);
         layOut.getChildren().addAll(lblGateAssigner, flightStyle, gridInfoPrompt);
         layOut.setAlignment(Pos.CENTER);
+        layOut.setSpacing(30);
 
-        Scene scene = new Scene(layOut, 550, 400);
+        Scene scene = new Scene(layOut, 650, 500, Color.AQUAMARINE);
 
         primaryStage.setTitle("Create Flight and Assign Gate");
         primaryStage.setScene(scene);
@@ -219,13 +223,6 @@ public class CreateFlight extends Application {
     }
 
     private void createFlight() {
-
-        //create the file first and then can store the data we input
-        //create json root object international, domsetic, otehrs
-        jsonObj_Root = new JSONObject();
-//        jsonObj_International = new JSONObject();
-//        jsonObj_Domestic = new JSONObject();
-//        jsonObj_Others = new JSONObject();
 
         timeOfArrival = new TimeOfFlight(cmbClockOfArrival.getValue(),
                 cmbMinutesOfArrival.getValue());
@@ -238,7 +235,7 @@ public class CreateFlight extends Application {
         myAlert = new Alert(AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO);
         myAlert.setTitle("Confirm Create Flight");
         myAlert.setHeaderText("Confirm the infomation going to create");
-        myAlert.setContentText( "Airline: " + txtAirline.getText()
+        myAlert.setContentText("Airline: " + txtAirline.getText()
                 + "\nFlight no.: " + txtFlightNo.getText() + "\nScheduled Arrival Time: " + dateOfArrival.getValue()
                 + "    " + timeOfArrival + "\nScheduled Departure Time: " + dateOfDeparture.getValue()
                 + "    " + timeOfDepature + "\nComes From: " + txtComesFrom.getText()
@@ -247,55 +244,20 @@ public class CreateFlight extends Application {
         Optional<ButtonType> result = myAlert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.YES) {
-            if (radInternational.isSelected()) {
-                infoOfFlight.add(new International("ProceedeXXX", txtAirline.getText(),
-                        txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                        dateOfArrival.getValue(), dateOfDeparture.getValue(),
-                        timeOfArrival, timeOfDepature));
-                flightType = "International";
-//                System.out.println(infoOfFlight.get(0).toString());
-                //putinto assign data into jsonObj
-//                jsonObj_AssignInfo.put("Airline: ", )
 
-            } else if (radDomestic.isSelected()) {
-                infoOfFlight.add(new Domestic(txtAirline.getText(),
-                        txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                        dateOfArrival.getValue(), dateOfDeparture.getValue(),
-                        timeOfArrival, timeOfDepature));
-                flightType = "Domestic";
-
-            } else if (radOthers.isSelected()) {
-                infoOfFlight.add(new Others(txtAirline.getText(),
-                        txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
-                        dateOfArrival.getValue(), dateOfDeparture.getValue(),
-                        timeOfArrival, timeOfDepature));
-                flightType = "Cargo or Private";
-
-            }
+            AssignFlightInfo();       
 
         } else {
             return;
-
         }
 
-        radInternational.setSelected(false);
-        radDomestic.setSelected(false);
-        radOthers.setSelected(false);
-        txtAirline.clear();
-        txtFlightNo.clear();
-        txtComesFrom.clear();
-        txtGoesTo.clear();
-        dateOfArrival.getEditor().clear();
-        dateOfDeparture.getEditor().clear();
-        cmbClockOfDeparture.getSelectionModel().select("");
-        cmbMinutesOfDeparture.getSelectionModel().select("");
-        cmbClockOfArrival.getSelectionModel().select("");
-        cmbMinutesOfArrival.getSelectionModel().select("");
+        CleanAllField();
 
     }
 
-    private void assignGate() {
+    private void AssignGate() {
 
+        //write arraylist data to the file
         builderFlightInfo = new StringBuilder();
 
         for (Flight f : infoOfFlight) {
@@ -327,7 +289,46 @@ public class CreateFlight extends Application {
 
     }
 
-    public void createFlightArrayJson() {
+    private ArrayList<Flight> AssignFlightInfo() {
+
+        if (radInternational.isSelected()) {
+            infoOfFlight.add(new International(txtAirline.getText(),
+                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
+                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
+                    timeOfArrival, timeOfDepature));
+
+        } else if (radDomestic.isSelected()) {
+            infoOfFlight.add(new Domestic(txtAirline.getText(),
+                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
+                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
+                    timeOfArrival, timeOfDepature));
+
+        } else if (radOthers.isSelected()) {
+            infoOfFlight.add(new Others(txtAirline.getText(),
+                    txtFlightNo.getText(), txtComesFrom.getText(), txtGoesTo.getText(),
+                    dateOfArrival.getValue(), dateOfDeparture.getValue(),
+                    timeOfArrival, timeOfDepature));
+
+        }
+
+        return infoOfFlight;
+    }
+
+    private void CleanAllField() {
+        radOthers.setSelected(false);
+        radInternational.setSelected(false);
+        radDomestic.setSelected(false);
+        txtAirline.clear();
+        txtFlightNo.clear();
+        txtComesFrom.clear();
+        txtGoesTo.clear();
+        dateOfArrival.getEditor().clear();
+        dateOfDeparture.getEditor().clear();
+        cmbClockOfDeparture.getSelectionModel().select("");
+        cmbMinutesOfDeparture.getSelectionModel().select("");
+        cmbClockOfArrival.getSelectionModel().select("");
+        cmbMinutesOfArrival.getSelectionModel().select("");
 
     }
+
 }
